@@ -14,15 +14,24 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js"
+    "test": "node node_modules/jest/bin/jest.js",
+    "lint": "yarn eslint .",
+    "lint:fix": "git diff --name-only HEAD | xargs yarn eslint --fix"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
+    "babel-eslint": "^8.2.2",
     "babel-plugin-transform-inline-environment-variables": "^0.3.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
     "expo": "^25.0.0",
     "native-base": "^2.3.10",
+    "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-redux": "^5.0.7"
