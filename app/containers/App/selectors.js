@@ -1,20 +1,18 @@
 import { bindActionCreators } from 'redux';
 import * as Actions from './actions';
 
-export const mapStateToProps = (state, props) => {
+export const mapStateToProps = (state, _props) => {
   const {
     appReducer: {
       loading,
-      data
-    }
+      data,
+    },
   } = state;
 
   return {
     loading,
-    data
-  }
-}
+    data,
+  };
+};
 
-export const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Actions, dispatch);
-}
+export const mapDispatchToProps = dispatch => bindActionCreators(Actions, dispatch);

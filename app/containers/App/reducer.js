@@ -1,4 +1,4 @@
-import { DATA_AVAILABLE } from './actions'; // Import the actions types constant we defined in our actions
+import { DATA_AVAILABLE } from './actions';
 
 const defaultState = {
   data: { hits: [] },
