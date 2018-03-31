@@ -1,15 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
+import { StackNavigator } from 'react-navigation';
+import store from './app/store';
+import Home from './app/containers/App';
+import DetailsPage from './app/components/DetailsPage';
 
-import store from './app/store'; // Import the store
-import Home from './app/containers/App'; // Import the component file
+const Navigator = StackNavigator({
+  Home: {
+    screen: Home,
+  },
+  DetailsPage: {
+    screen: DetailsPage,
+  },
+});
 
-export default class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Home />
-      </Provider>
-    );
-  }
-}
+const App = () => (
+  <Provider store={store}>
+    <Navigator />
+  </Provider>
+);
+
+export default App;

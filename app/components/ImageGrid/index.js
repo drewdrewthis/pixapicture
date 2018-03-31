@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, ImageBackground } from 'react-native';
+import { TouchableHighlight, StyleSheet, View, ImageBackground } from 'react-native';
 
 const styles = StyleSheet.create({
   imageGrid: {
@@ -21,17 +21,21 @@ const ImageGrid = (props) => {
       style={styles.imageGrid}
     >
       {images.map(item => (
-        <ImageBackground
+        <TouchableHighlight
+          onPress={() => props.openDetailsPage({ image: item })}
           key={item.id}
-          source={{ uri: item.previewURL }}
-          style={{
-            width: imageDimension,
-            height: imageDimension,
-          }}
-          imageStyle={{
-            width: '100%',
-          }}
-        />
+        >
+          <ImageBackground
+            source={{ uri: item.previewURL }}
+            style={{
+              width: imageDimension,
+              height: imageDimension,
+            }}
+            imageStyle={{
+              width: '100%',
+            }}
+          />
+        </TouchableHighlight>
       ))}
     </View>
   );
