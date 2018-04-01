@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "jest-expo": "25.0.0",
+    "jest-expo": "^26.0.0",
     "react-native-scripts": "^1.12.0",
     "react-test-renderer": "16.2.0"
   },
@@ -19,7 +19,9 @@
     "lint:fix": "git diff --name-only HEAD~ | xargs yarn eslint --fix"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!react-native|expo|react-navigation|native-base-shoutem-theme)"    ]
   },
   "dependencies": {
     "babel-eslint": "^8.2.2",
