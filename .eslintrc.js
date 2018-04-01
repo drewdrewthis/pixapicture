@@ -8,5 +8,8 @@ module.exports = {
   "extends": "airbnb",
   "rules": {
     "react/jsx-filename-extension": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [0, { "argsIgnorePattern": "^_" }],
+    "import/prefer-default-export": 0
   }
 }

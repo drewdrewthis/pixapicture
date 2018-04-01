@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, ScrollView, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { Spinner, Container, Footer } from 'native-base';
 import ImageGrid from '../../components/ImageGrid';
 import SearchBar from '../../components/SearchBar';
@@ -9,7 +9,7 @@ import { mapStateToProps, mapDispatchToProps } from './selectors';
 import styles from './styles';
 import { windowDimensionProps } from './utils';
 
-class App extends React.Component {
+class App extends React.PureComponent {
   static navigationOptions = {
     title: 'PixaPicture',
     headerBackTitle: 'Back to Search',
@@ -33,7 +33,8 @@ class App extends React.Component {
   renderImageGrid() {
     const {
       loading,
-      data,
+      images,
+      getData,
       navigation: {
         navigate,
       },
@@ -49,7 +50,10 @@ class App extends React.Component {
 
     return (
       <ImageGrid
-        images={data.hits}
+        isLandscape={this.state.isLandscape}
+        deviceWidth={this.state.deviceWidth}
+        getMoreImages={getData}
+        images={images}
         imageDimension={this.state.imageDimension}
         openDetailsPage={image => navigate('DetailsPage', image)}
       />
@@ -58,21 +62,13 @@ class App extends React.Component {
 
   render() {
     const {
-      loading,
-      getData,
+      updateQuery,
     } = this.props;
 
     return (
       <Container style={styles.container}>
-        <SearchBar getData={getData} />
-        <ScrollView
-          contentContainerStyle={{
-            height: loading ? '100%' : undefined,
-          }}
-          keyboardShouldPersistTaps="always"
-        >
-          { this.renderImageGrid() }
-        </ScrollView>
+        <SearchBar updateQuery={updateQuery} />
+        { this.renderImageGrid() }
         <Footer style={styles.footer} />
       </Container>
     );
@@ -81,14 +77,16 @@ class App extends React.Component {
 
 App.propTypes = {
   loading: PropTypes.bool.isRequired,
-  data: PropTypes.shape({
-    hits: PropTypes.array,
-  }),
+  images: PropTypes.arrayOf(PropTypes.any),
   getData: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+  updateQuery: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
-  data: false,
+  images: [],
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
