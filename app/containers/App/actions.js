@@ -5,6 +5,8 @@ export const UPDATE_PAGES = 'UPDATE_PAGES';
 
 const KEY = process.env.PIXABAY_KEY;
 
+const payloadCache = {};
+
 export const getData = () => (dispatch, getState) => {
   const {
     query,
@@ -20,9 +22,17 @@ export const getData = () => (dispatch, getState) => {
 
   const pages = oldPages + 1;
 
+  const queryUrl = `https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&per_page=200&page=${pages}`;
+
+  if (payloadCache[queryUrl]) {
+    dispatch({ type: UPDATE_RESULTS, payload: payloadCache[queryUrl] });
+    console.log('Dispatching from cached results.');
+    return;
+  }
+
   console.log('Updating images. Page:', pages);
 
-  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&per_page=200&page=${pages}`)
+  fetch(queryUrl)
     .then((response) => {
       if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code:', response.status, response._bodyText);
@@ -33,14 +43,14 @@ export const getData = () => (dispatch, getState) => {
       response.json().then((data) => {
         console.log('Received data from Pixabay -', data.hits.length, 'new images.');
 
-        dispatch({
-          type: UPDATE_RESULTS,
-          payload: {
-            ...data,
-            pages,
-            images: currentImages.concat(data.hits),
-          },
-        });
+        const payload = {
+          ...data,
+          pages,
+          images: currentImages.concat(data.hits),
+        };
+
+        payloadCache[queryUrl] = payload;
+        dispatch({ type: UPDATE_RESULTS, payload });
       });
     })
     .catch((err) => {
@@ -55,7 +65,18 @@ export const updateQuery = query => (dispatch) => {
 
   console.log('Searching for', query);
 
-  fetch(`https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&per_page=200`)
+  const queryUrl = `https://pixabay.com/api/?key=${KEY}&q=${query}&image_type=photo&per_page=200`;
+
+  if (payloadCache[queryUrl]) {
+    dispatch({
+      type: UPDATE_RESULTS,
+      payload: payloadCache[queryUrl],
+    });
+    console.log('Dispatching from cached results.');
+    return;
+  }
+
+  fetch(queryUrl)
     .then((response) => {
       if (response.status !== 200) {
         console.log('API_KEY', KEY);
@@ -64,15 +85,14 @@ export const updateQuery = query => (dispatch) => {
       }
 
       response.json().then((data) => {
-        console.log('Received data from Pixabay -', data.hits.length, 'images of ', data.total);
-        dispatch({
-          type: UPDATE_RESULTS,
-          payload: {
-            images: data.hits,
-            totalResults: data.total,
-            pages: 1,
-          },
-        });
+        console.log('Received data from Pixabay -', data.hits.length, 'images of', data.total);
+        const payload = {
+          images: data.hits,
+          totalResults: data.total,
+          pages: 1,
+        };
+        payloadCache[queryUrl] = payload;
+        dispatch({ type: UPDATE_RESULTS, payload });
       });
     })
     .catch((err) => {
