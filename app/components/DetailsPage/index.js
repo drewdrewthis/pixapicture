@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { Image, FlatList, View, ImageBackground } from 'react-native';
 import { Icon, Button, Text } from 'native-base';
@@ -27,7 +28,7 @@ class DetailsPage extends Component {
   }
 
   render() {
-    const image = get(this.props, 'navigation.state.params.image', defaultImage);
+    const image = get(this.props.navigation, 'state.params.image', defaultImage);
     const { infoOpen } = this.state;
 
     return (
@@ -67,6 +68,7 @@ class DetailsPage extends Component {
                 <FlatList
                   style={styles.infoList}
                   data={[
+                    { key: 'resolution', text: `${image.imageWidth} x ${image.imageHeight}` },
                     { key: 'views', text: image.views },
                     { key: 'likes', text: image.likes },
                     { key: 'favorites', text: image.favorites },
@@ -89,5 +91,25 @@ class DetailsPage extends Component {
     );
   }
 }
+
+DetailsPage.propTypes = {
+  navigation: PropTypes.shape({
+    state: PropTypes.shape({
+      params: PropTypes.shape({
+        image: PropTypes.shape({
+          user: PropTypes.string,
+          userImageURL: PropTypes.string,
+          webformatURL: PropTypes.string.isRequired,
+          views: PropTypes.number,
+          like: PropTypes.number,
+          favorites: PropTypes.number,
+          tags: PropTypes.string,
+          imageWidth: PropTypes.number,
+          imageHeight: PropTypes.number,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default DetailsPage;

@@ -6,6 +6,6 @@ export const windowDimensionProps = () => {
 
   return {
     isLandscape,
-    imageDimension: isLandscape ? (width / 8) : (width / 4),
+    deviceWidth: width,
   };
 };

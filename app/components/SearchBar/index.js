@@ -14,17 +14,17 @@ class SearchBar extends React.Component {
   constructor() {
     super();
 
-    this.getData = this.getData.bind(this);
-    this.getData = throttle(this.getData, 1000, { leading: false });
+    this.updateQuery = this.updateQuery.bind(this);
+    this.updateQuery = throttle(this.updateQuery, 1000, { leading: false });
   }
 
-  getData(text) {
-    const { getData } = this.props;
-    return getData(text);
+  updateQuery(text) {
+    const { updateQuery } = this.props;
+    return updateQuery(text);
   }
 
   handleChangeText = (text) => {
-    this.getData(text);
+    this.updateQuery(text);
   }
 
   render() {
@@ -42,7 +42,7 @@ class SearchBar extends React.Component {
 }
 
 SearchBar.propTypes = {
-  getData: PropTypes.func.isRequired,
+  updateQuery: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

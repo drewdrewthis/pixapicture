@@ -5,13 +5,19 @@ export const mapStateToProps = (state, _props) => {
   const {
     appReducer: {
       loading,
-      data,
+      images,
+      totalResults,
+      pages,
+      query,
     },
   } = state;
 
   return {
     loading,
-    data,
+    images,
+    pages,
+    totalResults,
+    query,
   };
 };
 
